@@ -12,7 +12,7 @@
 ecbdata xxx .
 
 
-... form the [ECB Data Portal](https://data.ecb.europa.eu/help/data/overview).
+... from the [ECB Data Portal](https://data.ecb.europa.eu/help/data/overview).
 
 ## Installation
 You can install with pip as:
