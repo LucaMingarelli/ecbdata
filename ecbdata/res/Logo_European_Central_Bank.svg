@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="360" height="300" viewBox="-90 -60 180 150" fill="#fff315">
+<circle r="60" fill="#003299"/>
+<path d="M-70.843013-15H31.177404l-4.156987 10H-75zm0 20H22.863429l-4.156987 10H-75zM38.302222-32.13938a50 50 0 1 0 0 64.278761v14.04438a60 60 0 1 1 4.231556-88.502524z" transform="translate(3) scale(.55)"/>
+<path id="a" d="M0-54l3.526712 10.854102-9.233051-6.708204h11.412678l-9.233051 6.708204z"/>
+<use xlink:href="#a" transform="scale(1-1) rotate(180 0-48)"/>
+<g id="b">
+<use xlink:href="#a" transform="rotate(30) rotate(42 0-48)"/>
+<use xlink:href="#a" transform="rotate(60) rotate(12 0-48)"/>
+<use xlink:href="#a" transform="rotate(90) rotate(54 0-48)"/>
+<use xlink:href="#a" transform="rotate(120) rotate(24 0-48)"/>
+<use xlink:href="#a" transform="rotate(150) rotate(66 0-48)"/>
+</g>
+<use xlink:href="#b" transform="scale(-1 1)"/>
+<path d="M-90-3h24.068217a66 66 0 1 0 131.863566 0 H90V90H-90z"  fill="#003299"/>
+</svg>
