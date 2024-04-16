@@ -1,2 +1,4 @@
+requests
+pandas
 pytest
 pytest-cov
