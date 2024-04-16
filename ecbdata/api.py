@@ -83,6 +83,24 @@ class ECB_DataPortal:
         if includehistory: url += f"&includehistory={includehistory}"
         return url
 
+    def __response_handler(self, response):
+
+        errors_msgs = {
+        304: "No changes. There have been no changes to the data since the timestamp supplied in the If-Modified-Since header.",
+        400: "Syntax error. Syntactic or semantic issue with the parameters supplied.",
+        404: "No results found. There are no results matching the query.",
+        406: "Not Acceptable.",
+        500: "Internal Server Error. Feel free to try again later or to contact the support hotline https://ecb-registration.escb.eu/statistical-information.",
+        501: "Not implemented.",
+        503: "Service unavailable: Web service is temporarily unavailable.",
+        }
+        if response.status_code!=200:
+            if response.status_code in errors_msgs:
+                raise Exception(f'REQUEST ERROR {response.status_code}: '+errors_msgs[response.status_code])
+            else:
+                print(f'REQUEST ERROR {response.status_code}: ')
+                response.raise_for_status()
+
     def get_series(self, ticker, start: str=None, end: str=None,
                    detail: str=None, updatedafter: str=None,
                    firstnobservations: int=None, lastnobservations: int=None, includehistory: bool=False):
@@ -111,6 +129,7 @@ class ECB_DataPortal:
                                                              firstnobservations=firstnobservations,
                                                              lastnobservations=lastnobservations,
                                                              includehistory=includehistory))
+        self.__response_handler(response=response)
         df = pd.read_csv(io.StringIO(response.content.decode()))
         return df
 

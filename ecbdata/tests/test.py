@@ -16,5 +16,5 @@ from connectors.certificates import where
 from connectors.certificates.proxies import PROXIES
 ecbdata = ECB_DataPortal(proxies=PROXIES, verify=where())
 
-ecbdata.get_series(tickers[0])
+ecbdata.get_series(ticker=tickers[0])
 
