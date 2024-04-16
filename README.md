@@ -1,7 +1,7 @@
 # ecbdata <img src="https://raw.githubusercontent.com/LucaMingarelli/ecbdata/master/ecbdata/res/Logo_European_Central_Bank.svg"  width="80">
 
 [![CircleCI](https://circleci.com/gh/LucaMingarelli/ecbdata.svg?style=svg&circle-token=cd9c300380d25c24c66cd6637693cc50a7e00248)](https://app.circleci.com/pipelines/github/LucaMingarelli/ecbdata)
-[![version](https://img.shields.io/badge/version-0.0.4-success.svg)](#)
+[![version](https://img.shields.io/badge/version-0.0.5-success.svg)](#)
 [![PyPI Latest Release](https://img.shields.io/pypi/v/ecbdata.svg)](https://pypi.org/project/ecbdata/)
 [![License](https://img.shields.io/pypi/l/ecbdata.svg)](https://github.com/LucaMingarelli/ecbdata/blob/master/LICENSE.txt)
 [![Downloads](https://static.pepy.tech/badge/ecbdata)](https://pepy.tech/project/ecbdata)
@@ -9,10 +9,8 @@
 
 ## About
 
-ecbdata xxx .
-
-
-... from the [ECB Data Portal](https://data.ecb.europa.eu/help/data/overview).
+The **ecbdata** API allows for easy querying of data 
+from the [ECB Data Portal](https://data.ecb.europa.eu/help/data/overview).
 
 ## Installation
 You can install with pip as:
@@ -21,15 +19,26 @@ You can install with pip as:
 
 ### Example
 
-xxx:
-
 ```python
 from ecbdata import ecbdata
 
-from ecbdata import ECB_DataPortal
-ecbdata = ECB_DataPortal(proxies={'https': '<https-proxy>', 
-                                  'http': '<http-proxy>'})
+df = ecbdata.get_series('ICP.M.U2.Y.XEF000.3.INX', start='2024-01', end='2024-03')
+
 ```
+
+When behind a proxy server, one can establish a connection as
+
+```python
+from ecbdata import ecbdata
+ecbdata.connect(proxies={'https': '<https-proxy>', 
+                         'http': '<http-proxy>'})
+
+df = ecbdata.get_series('ICP.M.U2.Y.XEF000.3.INX', start='2024-01', end='2024-03')
+
+```
+
+For details on available series and filters, 
+please consult the [ECB Data Portal](https://data.ecb.europa.eu/help/data/overview) page.
 
 
 ## Author

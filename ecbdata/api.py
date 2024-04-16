@@ -26,18 +26,17 @@ class ECB_DataPortal:
             >>> from ecbdata import ecbdata
             >>> df = ecbdata.get_series('ICP.M.U2.Y.XEF000.3.INX')
             >>> # Or to specify Proxies
-            >>> from ecbdata import ECB_DataPortal
-            >>> ecbdata = ECB_DataPortal(proxies={'https': '<https-proxies>',
-            >>>                                   'http': '<http-proxies>'},
-            >>>                          verify=False)
+            >>> ecbdata.connect(proxies={'https': '<https-proxies>',
+            >>>                          'http': '<http-proxies>'},
+            >>>                 verify=False)
             >>> df = ecbdata.get_series('ICP.M.U2.Y.XEF000.3.INX')
         """
         self.proxies = proxies
         self.verify = verify
-        self._session = self.Session(proxies=self.proxies, verify=self.verify)
+        self.connect(proxies=self.proxies, verify=self.verify)
 
 
-    def Session(self, proxies: dict=None, verify: bool or str=None):
+    def connect(self, proxies: dict=None, verify: bool or str=None):
         """
         Wrapper around :class:`requests:requests.Session`.
 
@@ -53,13 +52,11 @@ class ECB_DataPortal:
             verify: Whether to verify SSL certificates. Either of: `True`: Verifies certificates using the default trust store; `False`: Bypasses certificate verification (use with caution!); Path to a PEM-encoded certificate file: Uses the specified certificate to verify the server's certificate chain.
 
         """
-        if not hasattr(self, '_session') or not self._session:
-            session = requests.Session()
-            session.proxies = proxies or {}
-            if verify:
-                session.verify = verify
-            self._session = session
-            return session
+        session = requests.Session()
+        session.proxies = proxies or {}
+        if verify:
+            session.verify = verify
+        self._session = session
 
 
     def _search_string(self, ticker, start=None, end=None,

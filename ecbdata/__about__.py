@@ -1,6 +1,6 @@
 __title__ = "ecbdata"
 __about__ = ""
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 __author__ = 'Luca Mingarelli'
 __email__ = "luca.mingarelli@ecb.europa.eu"
 __url__ = "https://github.com/LucaMingarelli/ecbdata"
