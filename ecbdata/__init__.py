@@ -3,7 +3,7 @@
  
 **Authors**: L. Mingarelli
 """
-from ecbdata.api import ecbdata, ECB_DataPortal
+from ecbdata.api import ecbdata
 
 
 

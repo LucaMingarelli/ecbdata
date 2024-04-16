@@ -20,6 +20,7 @@ class TestECBDATA:
         df = ecbdata.get_series(ticker=tickers[0], start='2024-01', end='2024-03')
         assert df.TIME_PERIOD.min() == '2024-01'
         assert df.TIME_PERIOD.max() == '2024-03'
+        print(df)
 
     def test_error(self):
         with pytest.raises(Exception):
