@@ -4,40 +4,42 @@
 **Authors**: L. Mingarelli
 """
 
-import requests  # HTTP library for requesting website
-from bs4 import BeautifulSoup as bs
+import requests
 import re, io
 import pandas as pd
 
 WSENTRYPOINT = 'https://data-api.ecb.europa.eu'
-
-###### TO BE DELETED ######################################
-from connectors.certificates.proxies import PROXIES
-from connectors.certificates import where
-proxies = PROXIES
-verify = where()
-class self:
-    pass
-self = self()
-###########################################################
-
 
 
 class ECB_DataPortal:
 
     def __init__(self, proxies=None, verify=None):
         """
-        XXX
+        ECB_DataPortal class for retrieving data from the ECB Data Portal: https://data.ecb.europa.eu/.
+        This class is a wrapper around the associated RESTful API https://data.ecb.europa.eu/help/api/overview.
+
         Args:
-            proxy:
-            verify:
+            proxy: Proxies specifications: a dictionary mapping protocol names (e.g. 'http', 'https') to proxy URLs. If not provided, environment variables 'HTTP_PROXY', 'HTTPS_PROXY' are used.
+            verify: Whether to verify SSL certificates. Either of: `True`: Verifies certificates using the default trust store; `False`: Bypasses certificate verification (use with caution!); Path to a PEM-encoded certificate file: Uses the specified certificate to verify the server's certificate chain.
+
+        Examples:
+            >>> from ecbdata import ecbdata
+            >>> df = ecbdata.get_series('ICP.M.U2.Y.XEF000.3.INX')
+            >>> # Or to specify Proxies
+            >>> from ecbdata import ECB_DataPortal
+            >>> ecbdata = ECB_DataPortal(proxies={'https': '<https-proxies>',
+            >>>                                   'http': '<http-proxies>'},
+            >>>                          verify=False)
+            >>> df = ecbdata.get_series('ICP.M.U2.Y.XEF000.3.INX')
         """
         self.proxies = proxies
         self.verify = verify
-        self._session = self.connect(proxies=self.proxies, verify=self.verify)
+        self._session = self.Session(proxies=self.proxies, verify=self.verify)
 
-    def __Session(self, proxies, verify):
-        """Wrapper around :class:`requests:requests.Session`.
+
+    def Session(self, proxies: dict=None, verify: bool or str=None):
+        """
+        Wrapper around :class:`requests:requests.Session`.
 
         The Session object allows you to persist certain parameters across requests. It also persists cookies across
         all requests made from the Session instance, and will use urllib3’s connection pooling. So if you’re making
@@ -46,22 +48,18 @@ class ECB_DataPortal:
 
         For more details see the documentation of the wrapped :class:`requests:requests.Session` class.
 
-        """
-        session = requests.Session()
-        session.proxies = proxies or {}
-        if verify:
-            session.verify = verify
-        return session
-
-    def connect(self, proxies=None, verify=None):
-        """
-        XXX
         Args:
-            proxy:
-            verify:
+            proxy: Proxies specifications: a dictionary mapping protocol names (e.g. 'http', 'https') to proxy URLs. If not provided, environment variables 'HTTP_PROXY', 'HTTPS_PROXY' are used.
+            verify: Whether to verify SSL certificates. Either of: `True`: Verifies certificates using the default trust store; `False`: Bypasses certificate verification (use with caution!); Path to a PEM-encoded certificate file: Uses the specified certificate to verify the server's certificate chain.
+
         """
-        if not self._session:
-            self._session = self.__Session(proxies, verify)
+        if not hasattr(self, '_session') or not self._session:
+            session = requests.Session()
+            session.proxies = proxies or {}
+            if verify:
+                session.verify = verify
+            self._session = session
+            return session
 
 
     def _search_string(self, ticker, start=None, end=None,
@@ -69,6 +67,7 @@ class ECB_DataPortal:
                        firstnobservations=None, lastnobservations=None,
                        includehistory=False
                        ):
+        """Constructs the url string for the options specified."""
         includehistory = 'true' if includehistory else 'false'
 
         decoded = re.findall(r"(\w+)\.", ticker)
@@ -84,10 +83,11 @@ class ECB_DataPortal:
         if includehistory: url += f"&includehistory={includehistory}"
         return url
 
-    def read(self, ticker, start: str=None, end: str=None,
-             detail: str=None, updatedafter: str=None,
-             firstnobservations: int=None, lastnobservations: int=None, includehistory: bool=False):
+    def get_series(self, ticker, start: str=None, end: str=None,
+                   detail: str=None, updatedafter: str=None,
+                   firstnobservations: int=None, lastnobservations: int=None, includehistory: bool=False):
         """
+        Downloads data for selected ticker.
 
         Args:
             ticker:
@@ -100,6 +100,10 @@ class ECB_DataPortal:
             includehistory: Using the includehistory parameter, you can instruct the web service to return previous versions of the matching data. This allows you to see how the data have evolved over time (i.e. see when new data were released, revised or deleted). Possible options are: false: only the version currently in production will be returned. This is the default. true: the version currently in production and all previous versions will be returned.
         Returns:
             pandas.DataFrame
+
+        Examples:
+            >>> from ecbdata import ecbdata
+            >>> df = ecbdata.get_series('ICP.M.U2.Y.XEF000.3.INX')
         """
         # response = _session.get(url=f"{WSENTRYPOINT}/service/data/{db}/{ticker_str}?format=csvdata")
         response = self._session.get(url=self._search_string(ticker=ticker, start=start, end=end,

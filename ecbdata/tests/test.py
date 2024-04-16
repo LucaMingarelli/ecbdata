@@ -3,7 +3,7 @@
  
 **Authors**: L. Mingarelli
 """
-from ecbdata.api import ECB_DataPortal
+from ecbdata import ECB_DataPortal
 
 tickers = ['ICP.M.U2.Y.XEF000.3.INX',                        # Inflation
            'MNA.Q.Y.I8.W2.S1.S1.B.B1GQ._Z._Z._Z.EUR.LR.N',   # GDP
@@ -11,10 +11,10 @@ tickers = ['ICP.M.U2.Y.XEF000.3.INX',                        # Inflation
            'ENA.Q.Y.I8.W2.S1.S1._Z.EMP._Z._T._Z.HW._Z.N',    # Employment in hour worked
            ]
 
-example = ECB_DataPortal(tickers)
 
-# call the class to download the data
-example()
+from connectors.certificates import where
+from connectors.certificates.proxies import PROXIES
+ecbdata = ECB_DataPortal(proxies=PROXIES, verify=where())
 
-# he data file can be retrieved with
-example.data
+ecbdata.get_series(tickers[0])
+
