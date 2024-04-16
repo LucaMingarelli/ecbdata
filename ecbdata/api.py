@@ -59,7 +59,7 @@ class ECB_DataPortal:
         self._session = session
 
 
-    def _search_string(self, ticker, start=None, end=None,
+    def _search_string(self, series_key, start=None, end=None,
                        detail=None, updatedafter=None,
                        firstnobservations=None, lastnobservations=None,
                        includehistory=False
@@ -67,9 +67,9 @@ class ECB_DataPortal:
         """Constructs the url string for the options specified."""
         includehistory = 'true' if includehistory else 'false'
 
-        decoded = re.findall(r"(\w+)\.", ticker)
+        decoded = re.findall(r"(\w+)\.", series_key)
         db = decoded[0]
-        ticker_str = '.'.join(re.findall(r"\.(\w+)", ticker))
+        ticker_str = '.'.join(re.findall(r"\.(\w+)", series_key))
         url = f"{WSENTRYPOINT}/service/data/{db}/{ticker_str}?format=csvdata"
         if start: url += f'&startPeriod={start}'
         if end:   url += f'&endPeriod={end}'
@@ -98,14 +98,14 @@ class ECB_DataPortal:
                 print(f'REQUEST ERROR {response.status_code}: ')
                 response.raise_for_status()
 
-    def get_series(self, ticker, start: str=None, end: str=None,
+    def get_series(self, series_key, start: str=None, end: str=None,
                    detail: str=None, updatedafter: str=None,
                    firstnobservations: int=None, lastnobservations: int=None, includehistory: bool=False):
         """
         Downloads data for selected ticker.
 
         Args:
-            ticker:
+            series_key: Series' key for the data to be retrieved. This can be obtained from the ECB Data Portal https://data.ecb.europa.eu/. E.g. HICP inflation that would be "ICP.M.U2.N.000000.4.ANR".
             start: It is possible to define a start date for which observations are to be returned. The values should be given according to the syntax defined in ISO 8601 or as SDMX reporting periods. The format will vary depending on the frequency. The supported formats are: YYYY for annual data (e.g. 2013); YYYY-S[1-2]  for semi-annual data (e.g. 2013-S1); YYYY-Q[1-4]  for quarterly data (e.g. 2013-Q1); YYYY-MM  for monthly data (e.g. 2013-01); YYYY-W[01-53]  for weekly data (e.g. 2013-W01); YYYY-MM-DD  for daily data (e.g. 2013-01-01).
             end:   It is possible to define an end date for which observations are to be returned. The values should be given according to the syntax defined in ISO 8601 or as SDMX reporting periods. The format will vary depending on the frequency. The supported formats are: YYYY for annual data (e.g. 2013); YYYY-S[1-2]  for semi-annual data (e.g. 2013-S1); YYYY-Q[1-4]  for quarterly data (e.g. 2013-Q1); YYYY-MM  for monthly data (e.g. 2013-01); YYYY-W[01-53]  for weekly data (e.g. 2013-W01); YYYY-MM-DD  for daily data (e.g. 2013-01-01).
             detail: Using the detail parameter, it is possible to specify the desired amount of information to be returned by the web service. Possible options are as follows. full: the data (Time series and Observations) and the Attributes will be returned. This is the default. dataonly: the Attributes will be excluded from the returned message. serieskeysonly: only the Time series will be returned, excluding the Attributes and the Observations. This can be used to list Time series that match a certain query without returning the actual data. nodata: the Time series will be returned, including the Attributes, but the Observations will not.
@@ -121,8 +121,8 @@ class ECB_DataPortal:
             >>> df = ecbdata.get_series('ICP.M.U2.Y.XEF000.3.INX')
         """
         # response = _session.get(url=f"{WSENTRYPOINT}/service/data/{db}/{ticker_str}?format=csvdata")
-        response = self._session.get(url=self._search_string(ticker=ticker, start=start, end=end,
-                                                             detail=detail, updatedafter=updatedafter,
+        response = self._session.get(url=self._search_string(series_key=series_key, start=start, end=end, detail=detail,
+                                                             updatedafter=updatedafter,
                                                              firstnobservations=firstnobservations,
                                                              lastnobservations=lastnobservations,
                                                              includehistory=includehistory))
