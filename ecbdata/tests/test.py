@@ -39,9 +39,18 @@ if _MANUAL:
     df = ecbdata.get_series(series_key=series_keys[0])
 
     import pandas as pd, pylab as plt
+    from ecbtools import set_ecb_style
+    set_ecb_style(font_size=12)
+
+    df = ecbdata.get_series('ICP.M.U2.N.000000.4.ANR', start='2010-01')
+
     df.TIME_PERIOD = pd.to_datetime(df.TIME_PERIOD)
     df = df.set_index('TIME_PERIOD')
+
     df.OBS_VALUE.plot()
+    plt.xlabel('')
+    plt.tight_layout()
+    plt.savefig('HICP.svg')
     plt.show()
 
 
