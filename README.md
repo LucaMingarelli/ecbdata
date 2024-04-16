@@ -10,7 +10,7 @@
 ## About
 
 The **ecbdata** API allows for easy querying of data 
-from the [ECB Data Portal](https://data.ecb.europa.eu/help/data/overview).
+from the European Central Bank's [Data Portal](https://data.ecb.europa.eu/help/data/overview).
 
 ## Installation
 You can install with pip as:

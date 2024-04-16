@@ -49,8 +49,9 @@ if _MANUAL:
 
     df.OBS_VALUE.plot()
     plt.xlabel('')
+    plt.ylabel('HICP Inflation [%]')
     plt.tight_layout()
-    plt.savefig('HICP.svg')
+    plt.savefig('HICP.png', dpi=400)
     plt.show()
 
 
