@@ -25,7 +25,7 @@ setuptools.setup(
     url=about['__url__'],
     license='MIT',
     long_description=long_description,
-    long_description_content_type="markdown",
+    long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
     include_package_data=True,
     install_requires=install_requirements,
