@@ -34,11 +34,9 @@ class TestECBDATA:
 
     def test_params(self):
         df_first = ecbdata.get_series(series_key=series_keys[0], firstnobservations=5)
-
-
-        
+        assert df_first.TIME_PERIOD.nunique() == 5 & df_first.TIME_PERIOD.min() == '1997-01'
         df_last = ecbdata.get_series(series_key=series_keys[0], lastnobservations=5)
-
+        assert df_last.TIME_PERIOD.nunique() == 5 & df_last.TIME_PERIOD.min() != '1997-01'
 
 
 
