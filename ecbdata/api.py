@@ -67,9 +67,8 @@ class ECB_DataPortal:
         """Constructs the url string for the options specified."""
         includehistory = 'true' if includehistory else 'false'
 
-        decoded = re.findall(r"(\w+)\.", series_key)
-        db = decoded[0]
-        ticker_str = '.'.join(re.findall(r"\.(\w+)", series_key))
+        db, ticker_str = series_key.split('.',1)
+
         url = f"{WSENTRYPOINT}/service/data/{db}/{ticker_str}?format=csvdata"
         if start: url += f'&startPeriod={start}'
         if end:   url += f'&endPeriod={end}'

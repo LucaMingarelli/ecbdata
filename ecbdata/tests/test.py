@@ -11,6 +11,8 @@ series_keys = ['ICP.M.U2.Y.XEF000.3.INX',                        # Inflation
                'MNA.Q.Y.I8.W2.S1.S1.B.B1GQ._Z._Z._Z.EUR.LR.N',   # GDP
                'FM.M.U2.EUR.4F.MM.EONIA.HSTA',                   # EONIA
                'ENA.Q.Y.I8.W2.S1.S1._Z.EMP._Z._T._Z.HW._Z.N',    # Employment in hour worked
+               'EXR.M..EUR.SP00.A',                              # All exchange rates
+               'EXR.M.USD+GBP+JPY.EUR.SP00.A',                   # USD, GBP, JPY exchange rates
                ]
 
 class TestECBDATA:
@@ -21,10 +23,21 @@ class TestECBDATA:
         assert df.TIME_PERIOD.min() == '2024-01'
         assert df.TIME_PERIOD.max() == '2024-03'
         print(df)
+        df_all = ecbdata.get_series(series_key=series_keys[4], start='2024-01', end='2024-03')
+        assert len(set(df_all.CURRENCY)) >= 30
+        df_usd_gbp_jpy = ecbdata.get_series(series_key=series_keys[5], start='2024-01', end='2024-03')
+        assert set(df_usd_gbp_jpy.CURRENCY) == {'GBP', 'JPY', 'USD'}
 
     def test_error(self):
         with pytest.raises(Exception):
             ecbdata.get_series(series_key="ABC.CBA", start='2024-01-01', end='2024-03-01')
+
+    def test_params(self):
+        df_first = ecbdata.get_series(series_key=series_keys[0], firstnobservations=5)
+
+
+        
+        df_last = ecbdata.get_series(series_key=series_keys[0], lastnobservations=5)
 
 
 
