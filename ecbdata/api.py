@@ -73,7 +73,7 @@ class ECB_DataPortal:
         if start: url += f'&startPeriod={start}'
         if end:   url += f'&endPeriod={end}'
         if detail: url += f"&detail={detail}"
-        if updatedafter: url += f"&updatedafter={updatedafter}"
+        if updatedafter: url += f"&updatedAfter={updatedafter}"
         if firstnobservations: url += f"&firstNObservations={firstnobservations}"
         if lastnobservations: url += f"&lastNObservations={lastnobservations}"
         if includehistory: url += f"&includeHistory={includehistory}"
